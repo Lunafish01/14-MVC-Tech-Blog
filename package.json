@@ -9,10 +9,14 @@
   "author": "Josh Luna",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "express-sessions": "^1.0.6",
+    "express-handlebars": "^7.1.2",
+    "express-sessions": "^1.0.1",
     "fs": "^0.0.1-security",
     "handlebars": "^4.7.8",
+    "mysql2": "^3.6.5",
+    "nodemon": "^3.0.1",
     "sequelize": "^6.35.1"
   }
 }
