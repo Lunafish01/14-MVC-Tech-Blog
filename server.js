@@ -1,27 +1,39 @@
 const express = require('express');
 const path = require("path");
-const session = require('express-sessions');
-const exphbs = require('express-handlebars');
 const routes = require('./routes');
 const sequelize = require('./config/connection');
+const exphbs = require('express-handlebars');
+const hbs = exphbs.create({ helpers });
+const session = require('express-sessions');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Set up sessions with cookies
+//remember to use an env variable to store this data
+const sess = {
+  secret: 'Super secret secret',
+  cookie: {
+    // Stored in milliseconds
+    //setting a maximum age for this session
+    maxAge: 1 * 60 * 60 * 1000, // expires after 1 hour
+  },
+  //make sure to set up store with session options in project
+  resave: false,
+  saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize,
+  }),
+};
+
 //Middleware
+app.use(session(sess));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
-app.use(
-  session({
-    secret: "your-secret-key",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+app.use(express.static(path.join(__dirname, "public")));
 
 // Handlebars setup
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 // Routes
