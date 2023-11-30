@@ -81,3 +81,31 @@ router.post("/", withAuth, async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+//PUT request to update a post
+router.put("/:id", withAuth, async (req, res) => {
+  try {
+    const [affectedRows, [updatedPostData]] = await Post.update(
+      {
+        title: req.body.title,
+        post_content: req.body.post_content,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+
+    if (!affectedRows) {
+      res.status(404).json({ message: "Post not found" });
+      return;
+    }
+    res.json(updatedPostData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+module.exports = router;

@@ -49,7 +49,7 @@ router.post("/", withAuth, async (req, res) => {
 //PUT request to update a comment
 router.put("/:id", withAuth, async (req, res) => {
   try {
-    const [affectedRows] = await Comment.update(
+    const [affectedRows, [updatedCommentData]] = await Comment.update(
       {
         comment_text: req.body.comment_text,
       },
@@ -60,11 +60,11 @@ router.put("/:id", withAuth, async (req, res) => {
       }
     );
 
-    if (affectedRows === 0) {
-      res.status(404).json({ message: "No comment found with this id" });
+    if (!affectedRows) {
+      res.status(404).json({ message: "Comment not found" });
       return;
     }
-    res.json({ message: "Comment updated successfully" });
+    res.json(updatedCommentData);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
