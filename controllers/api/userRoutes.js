@@ -1,7 +1,5 @@
-const express = require("express").Router();
-const express = require("express");
-const router = express.Router();
-const { User, Post, Comment } = require("../models");
+const router = require("express").Router();
+const { User, Post, Comment } = require("../../models");
 
 //define routes
 
@@ -81,7 +79,7 @@ router.post("/login", async (req, res) => {
     });
 
     if (!dbUserData) {
-      res //possible syntax error
+      res
         .status(400)
         .json({ message: "Incorrect email or password. Please try again!" });
       return;
@@ -90,7 +88,7 @@ router.post("/login", async (req, res) => {
     const validPassword = dbUserData.checkPassword(req.body.password);
 
     if (!validPassword) {
-      res //possible syntax error
+      res
         .status(400)
         .json({ message: "Incorrect email or password. Please try again!" });
       return;
@@ -131,7 +129,7 @@ router.put("/:id", async (req, res) => {
     });
 
     if (affectedRows === 0) {
-      res.status(404).json({ message: "No user found with this id" }); //possible syntax error
+      res.status(404).json({ message: "No user found with this id" });
       return;
     }
 

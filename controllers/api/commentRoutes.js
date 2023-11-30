@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-//GET request to get comments by ID
+//GET request to get comments by id
 router.get("/:id", async (req, res) => {
   try {
     const dbCommentData = await Comment.findAll({
@@ -45,3 +45,30 @@ router.post("/", withAuth, async (req, res) => {
     res.status(400).json(err);
   }
 });
+
+//PUT request to update a comment
+router.put("/:id", withAuth, async (req, res) => {
+  try {
+    const [affectedRows] = await Comment.update(
+      {
+        comment_text: req.body.comment_text,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+
+    if (affectedRows === 0) {
+      res.status(404).json({ message: "No comment found with this id" });
+      return;
+    }
+    res.json({ message: "Comment updated successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+module.exports = router;
