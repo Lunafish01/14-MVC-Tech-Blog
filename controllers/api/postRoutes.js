@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
       include: [
         {
           model: Comment,
-          attributes: ["id", "title", "post_content", "created_at"],
+          attributes: ["id", "title", "created_at", "post_content"],
           include: {
             model: User,
             attributes: ["username"],
@@ -25,6 +25,56 @@ router.get("/", async (req, res) => {
       ],
     });
 
+    res.json(dbPostData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+//GET request to get posts by id
+router.get("/:id", async (req, res) => {
+  try {
+    const dbPostData = await Post.findOne({
+      where: {
+        id: req.params.id,
+      },
+      attributes: ["id", "title", "created_at", "post_content"],
+      include: [
+        {
+          model: User,
+          attributes: ["username"],
+        },
+        {
+          model: Comment,
+          attributes: ["id", "title", "created_at", "post_content", "user_id"],
+          include: {
+            model: User,
+            attributes: ["username"],
+          },
+        },
+      ],
+    });
+
+    if (!dbPostData) {
+      res.status(404).json({ message: "Post not found" });
+      return;
+    }
+    res.json(dbPostData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+//POST request to create a new post
+router.post("/", withAuth, async (req, res) => {
+  try {
+    const dbPostData = await Post.create({
+      title: req.body.title,
+      post_content: req.body.post_content,
+      user_id: req.session.user_id,
+    });
     res.json(dbPostData);
   } catch (err) {
     console.log(err);
