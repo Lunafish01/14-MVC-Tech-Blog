@@ -35,4 +35,4 @@ Post.init(
   }
 );
 
-modules.export = Post;
+module.exports = Post;
