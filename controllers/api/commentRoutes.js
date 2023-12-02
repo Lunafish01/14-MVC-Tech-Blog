@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 //GET request to get comments by id
 router.get("/:id", async (req, res) => {
   try {
-    const dbCommentData = await Comment.findAll({
+    const dbCommentData = await Comment.findOne({
       where: {
         id: req.params.id,
       },
