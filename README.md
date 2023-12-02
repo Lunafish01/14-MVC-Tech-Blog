@@ -1,7 +1,7 @@
 # 14-MVC-Tech-Blog
 
 ## Description
-My journey to become a full-stack developer has lead to me creating a full-stack Tech Blog web application using express.js and the MVC paradigm. Users can sign-up as new user for the blog, update their profiles with posts and comments, as well as edit and delete posts and comments. Users will be able to see all of their own posts and comments as well as other users interacting with the blog site. 
+My journey to become a full-stack developer has lead to me creating a full-stack Tech Blog web application using express.js, handlebars and the MVC paradigm. Users can sign-up as new user for the blog, update their profiles with posts and comments, as well as edit and delete posts and comments. Users will be able to see all of their own posts and comments as well as other users interacting with the blog site. 
 
 ## Table of Contents
 * [User Story](#user-story)
