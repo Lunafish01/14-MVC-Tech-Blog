@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const path = require("path");
 const routes = require("./controllers");
 const sequelize = require("./config/connection");
@@ -30,8 +31,8 @@ const sess = {
 
 //Middleware
 app.use(session(sess));
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Handlebars setup
