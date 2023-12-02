@@ -1,14 +1,15 @@
 # 14-MVC-Tech-Blog
 
 ## Description
+My journey to become a full-stack developer has lead to me creating a full-stack Tech Blog web application using express.js and the MVC paradigm. Users can sign-up as new user for the blog, update their profiles with posts and comments, as well as edit and delete posts and comments. Users will be able to see all of their own posts and comments as well as other users interacting with the blog site. 
 
 ## Table of Contents
 * [User Story](#user-story)
 * [Acceptance Criteria](#acceptance-criteria)
 * [Installation](#installation)
 * [Usage](#usage)
-* [Sources](#sources)
 * [Issues](#issues)
+* [Links](#Links)
 
 ## User Story
 
@@ -48,8 +49,25 @@
 - THEN I am able to view posts and comments but I am prompted to log in again before I can add, update, or delete posts
 
 ## Installation
-
-## Sources
+packages and dependencies included in this application:
+* [express](https://expressjs.com/)
+* [express-session](https://www.npmjs.com/package/express-session)
+* [express-handlebars](https://www.npmjs.com/package/express-handlebars)
+* [Node](https://nodejs.org/en/docs)
+* [MySQL](https://dev.mysql.com/doc/)
+* [sequelize](https://sequelize.org/master/)
+* [connect-session-sequelize](https://www.npmjs.com/package/connect-session-sequelize)
+* [dotenv](https://www.npmjs.com/package/dotenv)
+* [fs](https://nodejs.org/api/fs.html)
+* [Nodemon](https://nodemon.io/)
+* [handlebars](https://handlebarsjs.com/)
+* [bcrypt](https://www.npmjs.com/package/bcrypt)
 
 ## Issues
+- I have been running into lots of issues with seeding my models files, but was able to use the examples in class activities and stack-overflow to find my solution
+- Having issues when running application with middelware and routes, have not been ablke to figure out how to resolve this bug. 
+- The previously mentioned issue has prevented me from being able to test out my routes top make sure they work. 
 
+## Links
+* [GitHub Link](https://github.com/Lunafish01/14-MVC-Tech-Blog)
+* [Heroku-deployed-app](https://still-sierra-65603-a9b95c74c43a.herokuapp.com/)
