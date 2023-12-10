@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const withAuth = require("../../utils/auth");
-const sequelize = require("../../config/connection");
 const { Post, User, Comment } = require("../../models");
 
 //GET request to get all posts
@@ -18,16 +17,12 @@ router.get("/", async (req, res) => {
             attributes: ["username"],
           },
         },
-        {
-          model: User,
-          attributes: ["username"],
-        },
       ],
     });
 
     res.json(dbPostData);
   } catch (err) {
-    console.log(err);
+    console.error("Error in postRoutes GET /:", err);
     res.status(500).json(err);
   }
 });
@@ -57,13 +52,13 @@ router.get("/:id", async (req, res) => {
     });
 
     if (!dbPostData) {
-      res.status(404).json({ message: "Post not found" });
+      res.status(404).json({ message: "Post entry not found" });
       return;
     }
     res.json(dbPostData);
   } catch (err) {
     console.log(err);
-    res.status(500).json(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -78,7 +73,7 @@ router.post("/", withAuth, async (req, res) => {
     res.json(dbPostData);
   } catch (err) {
     console.log(err);
-    res.status(500).json(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -98,13 +93,35 @@ router.put("/:id", withAuth, async (req, res) => {
     );
 
     if (!affectedRows) {
-      res.status(404).json({ message: "Post not found" });
+      res.status(404).json({ message: "Post entry not found" });
       return;
     }
     res.json(updatedPostData);
   } catch (err) {
     console.log(err);
-    res.status(500).json(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//Delete route to delete user by id
+router.delete("/:id", withAuth, async (req, res) => {
+  try {
+    const deletedRows = await Post.destroy({
+      where: {
+        id: req.params.id,
+        user_id: req.session.user_id,
+      },
+    });
+
+    if (!deletedRows) {
+      res.status(404).json({ message: "Post entry not found" });
+      return;
+    }
+
+    res.json({ message: "Post entry deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 

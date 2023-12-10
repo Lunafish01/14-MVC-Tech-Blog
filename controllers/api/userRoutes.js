@@ -1,28 +1,28 @@
 const router = require("express").Router();
 const { Post, User, Comment } = require("../../models");
 
-//define routes
-
 //define a route for handling GET requests to '/api/users'
-router.get("/", (req, res) => {
-  User.findAll({
+router.get("/", async (req, res) => {
+  try{
+    const dbUserData = await User.findAll({
     attributes: { exclude: ["password"] },
-  })
-    .then((dbUserData) => res.json(dbUserData))
-    .catch((err) => {
-      console.log(err);
+  });
+    console.log("Data retrival successful");
+    
+    res.json(dbUserData);
+    } catch (err) {
+      console.error("Error", err);
       res.status(500).json(err);
-    });
+    }
 });
 
 //define a route for handling GET requests to '/api/users/:id'
 router.get("/:id", async (req, res) => {
   try {
-    const dbUserData = await User.findOne({
+    const userId = req.params.id;
+
+    const dbUserData = await User.findByPk(userId, {
       attributes: { exclude: ["password"] },
-      where: {
-        id: req.params.id,
-      },
       include: [
         {
           model: Post,
@@ -45,7 +45,7 @@ router.get("/:id", async (req, res) => {
     res.json(dbUserData);
   } catch (err) {
     console.log(err);
-    res.status(500).json(err);
+    res.status(500).son({ error: "Internal Sever Error" });
   }
 });
 
@@ -63,6 +63,7 @@ router.post("/", async (req, res) => {
     req.session.username = dbUserData.username;
     req.session.loggedIn = true;
     res.json(dbUserData);
+
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -72,16 +73,19 @@ router.post("/", async (req, res) => {
 // POST route for handling user login
 router.post("/login", async (req, res) => {
   try {
+    console.log("Username", req.body.uersname);
+    console.log("Password", req.body.password);
+
     const dbUserData = await User.findOne({
       where: {
-        email: req.body.email,
+        username: req.body.username,
       },
     });
 
     if (!dbUserData) {
       res
         .status(400)
-        .json({ message: "Incorrect email or password. Please try again!" });
+        .json({ message: "Incorrect username or password. Please try again!" });
       return;
     }
 
@@ -90,7 +94,7 @@ router.post("/login", async (req, res) => {
     if (!validPassword) {
       res
         .status(400)
-        .json({ message: "Incorrect email or password. Please try again!" });
+        .json({ message: "Incorrect username or password. Please try again!" });
       return;
     }
 
@@ -118,26 +122,26 @@ router.post("/logout", (req, res) => {
   }
 });
 
-//PUT route for updating user data by ID
-router.put("/:id", async (req, res) => {
-  try {
-    const [affectedRows] = await User.update(req.body, {
-      individualHooks: true,
-      where: {
-        id: req.params.id,
-      },
-    });
+// //PUT route for updating user data by ID
+// router.put("/:id", async (req, res) => {
+//   try {
+//     const [affectedRows] = await User.update(req.body, {
+//       individualHooks: true,
+//       where: {
+//         id: req.params.id,
+//       },
+//     });
 
-    if (affectedRows === 0) {
-      res.status(404).json({ message: "No user found with this id" });
-      return;
-    }
+//     if (affectedRows === 0) {
+//       res.status(404).json({ message: "No user found with this id" });
+//       return;
+//     }
 
-    res.json({ message: "Update successful" });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-});
+//     res.json({ message: "Update successful" });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json(err);
+//   }
+// });
 
 module.exports = router;

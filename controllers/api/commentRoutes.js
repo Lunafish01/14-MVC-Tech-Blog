@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const withAuth = require("../../utils/auth");
-const { Comment } = require("../../models");
+const { Comment, User, Post } = require("../../models");
 
 //GET request to get all comments
 router.get("/", async (req, res) => {
@@ -8,8 +8,8 @@ router.get("/", async (req, res) => {
     const dbCommentData = await Comment.findAll({});
     res.json(dbCommentData);
   } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
+    console.error("Error in commentRoutes GET /:" , err);
+    res.status(500).json({ error: "Internal server error. Unable to fetch comment data" });
   }
 });
 
@@ -20,7 +20,22 @@ router.get("/:id", async (req, res) => {
       where: {
         id: req.params.id,
       },
+      atrributes: ["user_id", "post_id", "comment_text"],
+      include: [
+        {
+          model: User,
+          atrributes: ["username"],
+        },
+        {
+          model: Post,
+          atrributes: ["title", "post_content"],
+        }
+      ]
     });
+
+    if (!dbCommentData) {
+      res.status(404).json({ message: "Entry not found" })
+    }
     res.json(dbCommentData);
   } catch (err) {
     console.log(err);
@@ -42,7 +57,7 @@ router.post("/", withAuth, async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(400).json(err);
+    res.status(400).json({ error: "Internal server error" });
   }
 });
 
@@ -56,6 +71,7 @@ router.put("/:id", withAuth, async (req, res) => {
       {
         where: {
           id: req.params.id,
+          user_id: req.params.user_id
         },
       }
     );
@@ -67,8 +83,31 @@ router.put("/:id", withAuth, async (req, res) => {
     res.json(updatedCommentData);
   } catch (err) {
     console.log(err);
-    res.status(500).json(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
+
+//DELETE request to delete user by id
+router.delete("/:id", withAuth, async (req, res) => {
+  try {
+    const deletedRows = await Comment.destroy({
+      where: {
+        id: req.params.id,
+        user_id: req.session.user_id,
+      },
+    });
+
+    if (deletedRows === 0) {
+      res.status(404).json({ message: "No comment found with this id" });
+      return;
+    }
+
+    res.json({ message: "Comment deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 module.exports = router;
