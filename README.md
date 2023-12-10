@@ -8,10 +8,14 @@ My journey to become a full-stack developer has lead to me creating a full-stack
 * [Acceptance Criteria](#acceptance-criteria)
 * [Installation](#installation)
 * [Usage](#usage)
+* [Sources](#sources)
 * [Issues](#issues)
 * [Links](#Links)
 
 ## User Story
+* AS A developer who writes about tech
+* I WANT a CMS-style blog site
+* SO THAT I can publish articles, blog posts, and my thoughts and opinions
 
 ## Acceptance Criteria
 - GIVEN a CMS-style blog site
@@ -49,7 +53,13 @@ My journey to become a full-stack developer has lead to me creating a full-stack
 - THEN I am able to view posts and comments but I am prompted to log in again before I can add, update, or delete posts
 
 ## Installation
-packages and dependencies included in this application:
+1.  seed table with "node seeds/index.js" command in terminal
+2.  run application with "nodemon server.js" command in terminal
+
+## Sources
+packages, dependencies, and technologies used in this application:
+
+* [Insomnia](https://docs.insomnia.rest/)
 * [express](https://expressjs.com/)
 * [express-session](https://www.npmjs.com/package/express-session)
 * [express-handlebars](https://www.npmjs.com/package/express-handlebars)
@@ -63,10 +73,9 @@ packages and dependencies included in this application:
 * [handlebars](https://handlebarsjs.com/)
 * [bcrypt](https://www.npmjs.com/package/bcrypt)
 
+
 ## Issues
-- I have been running into lots of issues with seeding my models files, but was able to use the examples in class activities and stack-overflow to find my solution
-- Having issues when running application with middelware and routes, have not been ablke to figure out how to resolve this bug. 
-- The previously mentioned issue has prevented me from being able to test out my routes top make sure they work. 
+
 
 ## Links
 * [GitHub Link](https://github.com/Lunafish01/14-MVC-Tech-Blog)
